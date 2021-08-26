@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 
 class EventsController extends BaseController
 {
@@ -96,8 +97,19 @@ class EventsController extends BaseController
     ]
      */
 
-    public function getEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 1');
+    /**
+     * @throws \Exception
+     */
+    public function getEventsWithWorkshops(): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $events = Event::with('workshop')->get();
+        } catch (\Throwable $e) {
+            throw new \Exception('implement in coding task 1');
+        }
+
+        return response()->json($events);
+
     }
 
 
@@ -175,7 +187,19 @@ class EventsController extends BaseController
     ```
      */
 
-    public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
+    /**
+     * @throws \Exception
+     */
+    public function getFutureEventsWithWorkshops(): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $futureEvens = Event::with(['workshop' => function ($query) {
+                    $query->where('start', '>=', date('Y-m-d'));
+                }])
+                ->get();
+        } catch (\Throwable $e) {
+            throw new \Exception('implement in coding task 2');
+        }
+        return response()->json($futureEvens);
     }
 }

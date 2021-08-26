@@ -94,7 +94,15 @@ class MenuController extends BaseController
     ]
      */
 
-    public function getMenuItems() {
-        throw new \Exception('implement in coding task 3');
+    /**
+     * @throws \Throwable
+     */
+    public function getMenuItems(): \Illuminate\Http\JsonResponse
+    {
+        $menu = MenuItem::with('children')
+            ->get();
+
+        return response()->json(['menus' => $menu]);
+
     }
 }
